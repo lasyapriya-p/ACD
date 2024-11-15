@@ -1,0 +1,25 @@
+import os
+import math
+
+directory_path = '/content/drive/MyDrive/ktextfiles'
+
+def dynamic_logarithmic_indexing(directory_path):
+    inverted_index = {}
+    doc_count = len(os.listdir(directory_path))
+
+    for filename in os.listdir(directory_path):
+        file_path = os.path.join(directory_path, filename)
+        with open(file_path, 'r', encoding='utf-8') as file:
+            content = file.read().split()
+            unique_terms = set(content)
+
+            for term in unique_terms:
+                if term not in inverted_index:
+                    inverted_index[term] = []
+                idf = math.log(doc_count / (1 + len(inverted_index[term])))
+                inverted_index[term].append((filename, idf))
+
+    return inverted_index
+
+dynamic_index = dynamic_logarithmic_indexing(directory_path)
+print(dynamic_index)
