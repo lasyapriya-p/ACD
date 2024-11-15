@@ -1,0 +1,23 @@
+import os
+
+def sort_based_indexing(directory_path):
+    inverted_index = {}
+
+    for filename in os.listdir(directory_path):
+        file_path = os.path.join(directory_path, filename)
+
+        with open(file_path, encoding='utf-8') as file:
+            content = file.read().lower()
+
+        terms = set(content.split())
+        for term in terms:
+            if term not in inverted_index:
+                inverted_index[term] = []
+            inverted_index[term].append(filename)
+
+    sorted_index = dict(sorted(inverted_index.items()))
+    return sorted_index
+
+directory_path = '/content/drive/MyDrive/ktextfiles'
+sorted_index = sort_based_indexing(directory_path)
+print(sorted_index)
