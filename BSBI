@@ -1,0 +1,29 @@
+import os
+from collections import defaultdict
+
+directory_path = '/content/drive/MyDrive/ktextfiles'
+
+def bsbi_algorithm(directory_path):
+    block_size = 100
+    block_count = 0
+    intermediate_indices = []
+
+    for block_start in range(0, len(os.listdir(directory_path)), block_size):
+        block_count += 1
+        block_files = os.listdir(directory_path)[block_start:block_start + block_size]
+        block_index = defaultdict(list)
+
+        for filename in block_files:
+            file_path = os.path.join(directory_path, filename)
+            with open(file_path, 'r', encoding='utf-8') as file:
+                content = file.read().split()
+                for word in set(content):
+                    block_index[word].append(filename)
+
+        intermediate_indices.append(dict(sorted(block_index.items())))
+
+    return intermediate_indices
+
+bsbi_indices = bsbi_algorithm(directory_path)
+for block in bsbi_indices:
+    print(block)
