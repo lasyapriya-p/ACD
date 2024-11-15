@@ -1,0 +1,50 @@
+import os
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
+from nltk.tokenize import word_tokenize
+
+# Ensure stopwords and punkt are downloaded
+nltk.download('stopwords')
+nltk.download('punkt')
+
+# Directory of documents
+directory_path = '/content/drive/MyDrive/ktextfiles'
+
+def preprocess_text(text):
+    # Initialize stopwords and stemmer
+    stop_words = set(stopwords.words('english'))
+    stemmer = PorterStemmer()
+
+    # Tokenize the text
+    tokens = word_tokenize(text)
+    tokens =[token.lower( ) for token in tokens if token.isalpha( )]
+
+    # Convert to lowercase and remove stopwords
+    filtered_tokens = [
+        stemmer.stem(token.lower()) for token in tokens if token.lower() not in stop_words
+    ]
+
+    return filtered_tokens
+
+def preprocess_documents(directory_path):
+    processed_docs = {}
+
+    # Iterate through all files in the directory
+    for filename in os.listdir(directory_path):
+        file_path = os.path.join(directory_path, filename)
+
+        # Read each file and preprocess the text
+        with open(file_path, encoding='utf-8') as file:
+            text = file.read()
+
+        # Process the document and store it in the dictionary
+        processed_docs[filename] = preprocess_text(text)
+
+    return processed_docs
+
+# Preprocess all documents in the directory
+preprocessed_data = preprocess_documents(directory_path)
+
+# Print the processed data
+print(preprocessed_data)
