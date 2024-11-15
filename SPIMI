@@ -1,0 +1,23 @@
+import os
+
+directory_path = '/content/drive/MyDrive/ktextfiles'
+
+def spimi_algorithm(directory_path):
+    inverted_index = {}
+
+    for filename in os.listdir(directory_path):
+        file_path = os.path.join(directory_path, filename)
+        with open(file_path, 'r', encoding='utf-8') as file:
+            terms = file.read().split()
+            for term in terms:
+                if term not in inverted_index:
+                    inverted_index[term] = set()
+                inverted_index[term].add(filename)
+
+    for term in inverted_index:
+        inverted_index[term] = sorted(inverted_index[term])
+
+    return dict(sorted(inverted_index.items()))
+
+spimi_index = spimi_algorithm(directory_path)
+print(spimi_index)
